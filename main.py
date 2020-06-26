@@ -169,6 +169,8 @@ def findNodeForEdge(edge, nodes):
 find all previous nodes for given conclusion
 ! returns nodes, which are not immediate previouses,
 ! but nodes with premises
+! had to be modified, because premises can be linked
+! directly to conclusion, or to default inference
 
 args: conclusion (node), list of all edges, list of all nodes
 return: list of nodes 
@@ -177,11 +179,18 @@ def findPreviousesForConclusion(conclusion, edges, nodes):
     
     previouses = findPreviousNode(conclusion, edges, nodes)
     nodeText = ['Default Inference', 'Default Rephrase', 'Default Conflict']
+    inferenceText = ['Arguing', 'Restating', 'Disagreeing']
     
     importantPreviouses = []
     for previous in previouses:
         if previous['text'] in nodeText:
-            importantPreviouses.append(findPreviousNode(previous, edges, nodes)[0])
+            if previous['text'] == 'Default Inference' and (len(findPreviousNode(previous, edges, nodes)) > 2):
+                inferencePreviouses = findPreviousNode(previous, edges, nodes)
+                for i in inferencePreviouses:
+                    if i['text'] not in inferenceText and i['text'] != conclusion['text']:
+                        importantPreviouses.append(i)
+            else:
+                importantPreviouses.append(findPreviousNode(previous, edges, nodes)[0])
     
     return importantPreviouses
 
@@ -223,7 +232,7 @@ args: root, where the database is (optional)
 return: number of premises (int), conclusion (string), name of 
     file, where conclusion is
 """    
-def mostPreviousesForAllFiles(root='./debateTVP'):
+def mostPreviousesForAllFiles(root='./debateTVP'): #debateTVN
     
     maxPrev = 0
     fileID = ""
