@@ -1,11 +1,27 @@
 import os
 import json
 
+"""
+read results from results.txt, created in main file
+
+args: none
+return: list 
+"""
+
 def readResults():
 
     file = open('results.txt', 'r')
     results = file.readlines()
     return results
+    
+"""
+create dictionary from results
+key: number of nodeset
+value: length of all chains of premises in that nodeset
+
+args: results created in readResults function
+return: dictionary
+"""
     
 def createResultsMap(results):
     
@@ -22,7 +38,15 @@ def createResultsMap(results):
                 line = line[0:1]
             resultsMap[currentKey].append(int(line))
     
-    return resultsMap                   
+    return resultsMap        
+
+"""
+creates ar updates file resultsEdited.txt
+file contains dictionary created in createResultsMap function
+
+args: dictionary created in said function
+return: none
+"""    
 
 def printResultsToFile(resultsMap):
 
@@ -38,7 +62,6 @@ def printResultsToFile(resultsMap):
 
 def testFunction():
     printResultsToFile(createResultsMap(readResults()))
-    #print(map)
-    #print(len(map.keys()))
+
     
 testFunction()

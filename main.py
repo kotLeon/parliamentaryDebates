@@ -101,7 +101,7 @@ def findPath(firstNode, edges, nodes):
 find paths for list of leaves - all paths for graph
 
 args: list of leaves, list of all edges, list of all nodes
-return list of paths (list of lists)
+return: list of paths (list of lists)
 """
 def findAllPaths(leaves, edges, nodes):
     
@@ -112,7 +112,7 @@ def findAllPaths(leaves, edges, nodes):
     return paths
     
 """
-pretty self-explanatory: print all nodes in path
+print all nodes in path
 
 args: list of nodes
 return: length of path
@@ -127,22 +127,24 @@ def printPath(path):
 
 """
 find previous nodes
-two cases: node is text node or is function node(Default Inference, 
+two cases: node is text node or is function node (Default Inference, 
 Default Rephrase, Default Conflict)
-nodes, which take us to the right side of the graph (evil side) are excluded
+nodes on the right side of the graph are excluded
 
 args: node which previous node we want to find, list of all edges, list of all nodes
-return: list of previous nodes`
+return: list of previous nodes
 """
 def findPreviousNode(thisNode, edges, nodes):
 
     node = [] 
-
-    if thisNode['text'] == 'Default Inference' or thisNode['text'] == 'Default Rephrase' or thisNode['text'] == 'Default Conflict':
+    nodeText = ['Default Inference', 'Default Rephrase', 'Default Conflict']
+    inferenceText = ['Arguing', 'Restating', 'Disagreeing']
+    
+    if thisNode['text'] in nodeText:
         for edge in edges:
             if edge['toID'] == thisNode['nodeID']:
                 possibleNode = findNodeForEdge(edge, nodes)
-                if possibleNode['text'] != 'Arguing' and possibleNode['text'] != 'Restating' and possibleNode['text'] != 'Disagreeing':
+                if possibleNode['text'] not in inferenceText:
                     node.append(findNodeForEdge(edge, nodes))
     
     else: 
@@ -289,13 +291,13 @@ def forAllFilesInDirectory(root='./debateTVN'):
             
 
 """
-as the name says: test 
+test 
 """
 def testFunction():
-    # dla najdluzszych lancuchow
+    # for length of chains
     #forAllFilesInDirectory()
 
-    # dla najwiekszej liczby przeslanek
+    # for number of premises
     print(mostPreviousesForAllFiles())
         
 testFunction()
